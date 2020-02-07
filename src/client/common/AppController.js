@@ -12,103 +12,99 @@ class AppController extends React.Component {
       arQuestions:[],
       totalIndex:0,
       index:0,
-      correctAnswers:0,
+      correctAnswers:0
     }
   }
 
   shuffleQuestions() {
-    this.state.arQuestions.sort(() => 0.5 - Math.random());
-    console.log("shuffling");
+    this.state.arQuestions.sort(() => 0.5 - Math.random())
+    console.log("shuffling")
   };
 
   componentDidMount(){
     //try catch needed
-      fetch(`http://localhost:4000/api/questions`)
-        .then(results => results.json())
-          .then(res => {
-              this.setState({
-                arQuestions:res.results
-              })
-              this.shuffleQuestions()
-          })
+    fetch(`http://localhost:4000/api/questions`)
+      .then(results => results.json())
+      .then(res => {
+        this.setState({
+          arQuestions:res.results
+        })
+        this.shuffleQuestions()
+      })
       //http reults check needed
-  }
+      //TODO refactor
+    }
 
-  onSubmit = (e) => {
-    let index = this.state.index
-    let totalIndex = this.state.totalIndex
-    this.setState({
-      index: ++index,
-      totalIndex: ++totalIndex
-    });
-    if (e === true){
-      console.log("correct answer");
-      let correctAnswers = this.state.correctAnswers
+    onSubmit = (e) => {
+      let index = this.state.index
+      let totalIndex = this.state.totalIndex
       this.setState({
-        correctAnswers: ++correctAnswers
+        index: ++index,
+        totalIndex: ++totalIndex
+      });
+      if (e === true){
+        console.log("correct answer")
+        let correctAnswers = this.state.correctAnswers
+        this.setState({
+          correctAnswers: ++correctAnswers
+        })
+      }
+      else{
+        console.log("incorrect answer")
+      }
+    }
+
+    onClick = (e) => {
+      this.setState({
+        index:0,
+        correctAnswers:0
       });
     }
-    else{
-      console.log("incorrect answer");
+
+    render(){
+      let data = this.state.arQuestions[this.state.totalIndex]
+
+      //TODO too many returns
+      if(this.state.totalIndex >= 50 ){
+        //restart quiz?
+        return (
+          <div>
+            Finished all questions!
+          </div>
+        );
+      }
+
+      if(this.state.arQuestions.length > 0 && this.state.index < 5){
+        if(data.type === "boolean"){
+          return (
+            <div>
+              <Boolean onSubmitFromParent={this.onSubmit} dataFromParent={data}/>
+            </div>
+          );
+        }
+        else if(data.type === "multiple"){
+          return (
+            <div>
+              <Multiple onSubmitFromParent={this.onSubmit} dataFromParent={data}/>
+            </div>
+          );
+        }
+        else if(data.type === "text"){
+          return (
+            <div>
+              <TextField onSubmitFromParent={this.onSubmit} dataFromParent={data}/>
+            </div>
+          );
+        }
+      }
+      else {
+        return (
+          <div>
+            <Summary onClickFromParent={this.onClick} dataFromParent={this.state}/>
+          </div>
+        );
+      }
     }
   }
 
-  onClick = (e) => {
-    console.log("FIM");
-    this.setState({
-      index:0,
-      correctAnswers:0
-    });
-  }
-
-  render(){
-    let data = this.state.arQuestions[this.state.totalIndex]
-    console.log(this.state.totalIndex);
-
-    if(this.state.totalIndex >= 50 ){
-      return (
-              <div>
-                Finished all questions!
-              </div>
-      )
-    }
-
-    if(this.state.arQuestions.length > 0 && this.state.index < 5){
-      //console.log(data);
-      if(data.type === "boolean"){
-        return (
-                  <div>
-                    <Boolean onSubmitFromParent={this.onSubmit} dataFromParent={data}/>
-                  </div>
-                )
-      }
-      else if(data.type === "multiple"){
-        return (
-                  <div>
-                    <Multiple onSubmitFromParent={this.onSubmit} dataFromParent={data}/>
-                  </div>
-                )
-      }
-      else if(data.type === "text"){
-        return (
-                  <div>
-                    <TextField onSubmitFromParent={this.onSubmit} dataFromParent={data}/>
-                  </div>
-                )
-      }
-
-    }
-    else {
-      return (
-                <div>
-                  <Summary onClickFromParent={this.onClick} dataFromParent={this.state}/>
-                </div>
-              )
-    }
-
-
-
-  }
-}
-
-export default AppController
+  export default AppController

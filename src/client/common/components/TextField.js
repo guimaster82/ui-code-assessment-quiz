@@ -5,32 +5,31 @@ import './template-custom.css'
 class TextField extends Component {
 
   constructor(props) {
-      super(props);
-      this.state = {
-        inputText:''
-      };
-
-      this.onSubmit = this.onSubmit.bind(this);
+    super(props);
+    this.state = {
+      inputText:''
     }
+    this.onSubmit = this.onSubmit.bind(this)
+  }
 
-    onSubmit = (e) => {
-      e.preventDefault();
-      if(this.state.inputText.toLowerCase() == this.props.dataFromParent.correct_answer.toLowerCase()){
-        this.props.onSubmitFromParent(true)
-      }
-      else{
-        this.props.onSubmitFromParent(false)
-      }
-      this.setState({
-        selecction: ''
-      })
+  onSubmit = (e) => {
+    e.preventDefault();
+    if(this.state.inputText.toLowerCase() === this.props.dataFromParent.correct_answer.toLowerCase()){
+      this.props.onSubmitFromParent(true)
     }
+    else{
+      this.props.onSubmitFromParent(false)
+    }
+    this.setState({
+      selecction: ''
+    })
+  }
 
-    onChange = (e) => {
-      this.setState({
-        inputText: e.target.value
-      })
-    }
+  onChange = (e) => {
+    this.setState({
+      inputText: e.target.value
+    })
+  }
 
   render() {
     return (
@@ -47,18 +46,12 @@ class TextField extends Component {
                 />
               </label>
             </li>
-
-
           </ul>
-
           <button className="myButton" type="submit">Next</button>
         </form>
       </div>
     );
-
-
   }
-
 
 }
 
