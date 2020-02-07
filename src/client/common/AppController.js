@@ -35,7 +35,7 @@ class AppController extends React.Component {
       //TODO refactor
     }
 
-    onSubmit = (e) => {
+    handleSubmit = (e) => {
       let index = this.state.index
       let totalIndex = this.state.totalIndex
       this.setState({
@@ -54,7 +54,7 @@ class AppController extends React.Component {
       }
     }
 
-    onClick = (e) => {
+    handleClick = (e) => {
       this.setState({
         index:0,
         correctAnswers:0
@@ -78,21 +78,21 @@ class AppController extends React.Component {
         if(data.type === "boolean"){
           return (
             <div>
-              <Boolean onSubmitFromParent={this.onSubmit} dataFromParent={data}/>
+              <Boolean onSubmitFromParent={this.handleSubmit} dataFromParent={data}/>
             </div>
           );
         }
         else if(data.type === "multiple"){
           return (
             <div>
-              <Multiple onSubmitFromParent={this.onSubmit} dataFromParent={data}/>
+              <Multiple onSubmitFromParent={this.handleSubmit} dataFromParent={data}/>
             </div>
           );
         }
         else if(data.type === "text"){
           return (
             <div>
-              <TextField onSubmitFromParent={this.onSubmit} dataFromParent={data}/>
+              <TextField onSubmitFromParent={this.handleSubmit} dataFromParent={data}/>
             </div>
           );
         }
@@ -100,7 +100,7 @@ class AppController extends React.Component {
       else {
         return (
           <div>
-            <Summary onClickFromParent={this.onClick} dataFromParent={this.state}/>
+            <Summary onClickFromParent={this.handleClick} dataFromParent={this.state}/>
           </div>
         );
       }
